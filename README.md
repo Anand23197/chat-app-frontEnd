@@ -1,3 +1,10 @@
+# chat-app
+this app is based on MERN Full Stack .
+# tech-stack
+React,Styled Component, css, Scss,Node, Mongo Db, Express, Socket.io
+# Description 
+You can chat with any one. If you have not register register and login. you can also logout from chat. It is similar like chat 
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
