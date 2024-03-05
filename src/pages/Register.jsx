@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import Logo from '../assets/Logo.jpg';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Logo from "../assets/Logo.jpg";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { RegisterRoute } from '../utils/APIRoutes';
+import { RegisterRoute } from "../utils/APIRoutes";
 
 const FormContainer = styled.div`
   height: 100vh;
@@ -16,145 +16,164 @@ const FormContainer = styled.div`
   align-items: center;
   gap: 1rem;
   background-color: #131324;
-  .brand{
+  .brand {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    img{
+    img {
       height: 5rem;
     }
-    h1{
+    h1 {
       color: white;
       text-transform: uppercase;
     }
   }
-  form{
+  form {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     background-color: #00000076;
     border-radius: 2rem;
     padding: 3rem 5rem;
-    input{
+    input {
       background-color: transparent;
       padding: 1rem;
       border: 0.1rem solid #4e0eff;
-      border-radius:  0.4rem;
+      border-radius: 0.4rem;
       color: white;
       width: 100%;
       font-size: 1rem;
-      &:focus{
+      &:focus {
         border: 0.1rem solid #997af0;
         outline: none;
-
       }
     }
-    button{
+    button {
       background-color: #997af0;
       color: white;
       padding: 1rem 2rem;
       border: none;
       font-weight: bold;
       cursor: pointer;
-      border-radius:  0.4rem;
+      border-radius: 0.4rem;
       text-transform: uppercase;
-      transition : 0.5s ease-in-out;
-      &:hover{
-        background-color: #4e0eff ;
+      transition: 0.5s ease-in-out;
+      &:hover {
+        background-color: #4e0eff;
       }
     }
-    span{
+    span {
       color: white;
       text-transform: uppercase;
-      a{
+      a {
         color: #4e0eff;
-        text-decoration : none
+        text-decoration: none;
       }
     }
   }
-`
+`;
 const toastOptions = {
-  position : "bottom-right",
-  autoClose : 8000,
+  position: "bottom-right",
+  autoClose: 8000,
   pauseOnHover: true,
-  theme: "dark"
-}
+  theme: "dark",
+};
 const Register = () => {
   const navigate = useNavigate();
-  const[values, setValues] = useState({
-    username : "",
-    email : "",
-    password : "",
-    confirmPassword : ""
-  })
-  useEffect(()=>{
-    if(localStorage.getItem('chat-app-user')){
-     navigate("/");
+  const [values, setValues] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  useEffect(() => {
+    if (localStorage.getItem("chat-app-user")) {
+      navigate("/");
     }
- },[])
-    const handleSubmit =async (event)=>{
-        event.preventDefault();
-        if(handleValidation()){
-      const {password, username, email} = values;
-            const {data} = await axios.post(RegisterRoute, {
-              username,
-              email,
-              password
-            });
+  }, [navigate]);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (handleValidation()) {
+      const { password, username, email } = values;
+      const { data } = await axios.post(RegisterRoute, {
+        username,
+        email,
+        password,
+      });
 
-            if(data.status === false){
-              toast.error(data.msg, toastOptions);
-            }
-            if(data.status === true){
-              localStorage.setItem('chat-app-user', JSON.stringify(data.user))
-              navigate("/");
-            }
-            
-        }
+      if (data.status === false) {
+        toast.error(data.msg, toastOptions);
+      }
+      if (data.status === true) {
+        localStorage.setItem("chat-app-user", JSON.stringify(data.user));
+        navigate("/");
+      }
     }
-    const handleChange = (event)=>{
-         setValues({ ...values,[event.target.name] : event.target.value})
-    }
+  };
+  const handleChange = (event) => {
+    setValues({ ...values, [event.target.name]: event.target.value });
+  };
 
-    const handleValidation = ()=>{
-      debugger
-      const {password, confirmPassword, username, email} = values;
-        if(password !== confirmPassword){
-          toast.error("password and cinfirm password should be same", toastOptions);
-          return false;
-        }else if(username.length < 2){
-          toast.error("Username should be at least 2 character", toastOptions);
-          return false;
-        }else if(password.length < 8){
-          toast.error("password would be at least 8 character", toastOptions);
-          return false;
-        }else if(email === ""){
-          toast.error("Email is required", toastOptions);
-          return false;
-        }
-        return true;
-    } 
+  const handleValidation = () => {
+    debugger;
+    const { password, confirmPassword, username, email } = values;
+    if (password !== confirmPassword) {
+      toast.error("password and cinfirm password should be same", toastOptions);
+      return false;
+    } else if (username.length < 2) {
+      toast.error("Username should be at least 2 character", toastOptions);
+      return false;
+    } else if (password.length < 8) {
+      toast.error("password would be at least 8 character", toastOptions);
+      return false;
+    } else if (email === "") {
+      toast.error("Email is required", toastOptions);
+      return false;
+    }
+    return true;
+  };
   return (
     <>
-     <FormContainer>
-        <form onSubmit={(e)=>handleSubmit(e)}>
-            <div className='brand'>
+      <FormContainer>
+        <form onSubmit={(e) => handleSubmit(e)}>
+          <div className="brand">
             <img src={Logo} alt="" />
             <h1>snappy</h1>
-            </div>
-            <input type="text" placeholder='Username' name='username' onChange={e=>handleChange(e)} />
-            <input type="email" placeholder='Email' name='email' onChange={e=>handleChange(e)} />
-            <input type="password" placeholder='Password' name='password' onChange={e=>handleChange(e)} />
-            <input type="password" placeholder='confirm Password' name='confirmPassword' onChange={e=>handleChange(e)} />
-            <button type='submit'>Create User</button>
-            <span>already have an account ? <Link to="/login">Login</Link></span>
+          </div>
+          <input
+            type="text"
+            placeholder="Username"
+            name="username"
+            onChange={(e) => handleChange(e)}
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            name="email"
+            onChange={(e) => handleChange(e)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            name="password"
+            onChange={(e) => handleChange(e)}
+          />
+          <input
+            type="password"
+            placeholder="confirm Password"
+            name="confirmPassword"
+            onChange={(e) => handleChange(e)}
+          />
+          <button type="submit">Create User</button>
+          <span>
+            already have an account ? <Link to="/login">Login</Link>
+          </span>
         </form>
-     </FormContainer>
-     <ToastContainer/>
+      </FormContainer>
+      <ToastContainer />
     </>
-  )
-}
+  );
+};
 
-
-export default Register
+export default Register;
